@@ -6,7 +6,7 @@ async function renderCoffee(filter) {
     coffeeWrapper.classList += ' coffee__loading'
 
     if (!coffee) {
-        coffee = await getBooks();
+        coffee = await getCoffee();
     }
 
     coffeeWrapper.classList.remove('coffee__loading')
@@ -91,7 +91,7 @@ function getCoffee() {
                 {
                     id: 2,
                     title: "Medium Roast",
-                    url: "medium roast.webp",
+                    url: "medium_roast_coffee.webp",
                     originalPrice: 24.99,
                     salePrice: 11.99,
                     rating: 5,
@@ -99,7 +99,7 @@ function getCoffee() {
                 {
                     id: 3,
                     title: "Dark Roast",
-                    url: "dark roast.webp",
+                    url: "dark roast coffee.webp",
                     originalPrice: 27.99,
                     salePrice: 14.99,
                     rating: 5,
@@ -107,7 +107,7 @@ function getCoffee() {
                 {
                     id: 4,
                     title: "French Roast",
-                    url: "french roast.webp",
+                    url: "frenchroast.webp",
                     originalPrice: 24.99,
                     salePrice: 14.99,
                     rating: 4.5,
@@ -115,7 +115,7 @@ function getCoffee() {
                 {
                     id: 5,
                     title: "Italian Roast",
-                    url: "italian roast.webp",
+                    url: "Italian Roast.jpeg",
                     originalPrice: 26.99,
                     salePrice: 14.99,
                     rating: 4,
@@ -131,7 +131,7 @@ function getCoffee() {
                 {
                     id: 7,
                     title: "Espresso Roast",
-                    url: "espresso roast.webp",
+                    url: "espresso_roast.jpg",
                     originalPrice: 29.99,
                     salePrice: 14.99,
                     rating: 4,

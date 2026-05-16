@@ -242,9 +242,8 @@ HIGHLIGHTS
   max-width: 100vw;
 }
 
-#highlights:after,
 #highlights:before {
-  background: url("assests/wave.svg");
+  background: url("coffee_bestie.jpg");
   content: "";
   position: absolute;
   width: 101vw;
