@@ -5,188 +5,77 @@ async function renderCoffee(filter) {
     const coffeeLoading = document.querySelector(".coffee__loading");
 
     coffeeLoading.style.display = "block";
-
-
+    coffee = await getCoffee();
     coffeeLoading.style.display = "none";
 
-
-    function getCoffeeById(id) {
-        return coffee.find((coffee) => coffee.id === id);
-        const url = 'https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&tags=under_30_minutes';
-        const options = {
-            method: 'GET',
-            headers: {
-                'x-rapidapi-key': '90273038afmshde2b2f4a176cf81p1e3d74jsn4ced151642ae',
-                'x-rapidapi-host': 'tasty.p.rapidapi.com',
-                'Content-Type': 'application/json'
-            }
-        };
-
-        try {
-            const response = await fetch(url, options);
-            const result = await response.json();
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-
-
-        if (filter === "LOW_TO_HIGH") {
-            coffee.sort(
-                (a, b) =>
-                    (a.salePrice || a.originalPrice) - (b.salePrice || b.originalPrice)
-            );
-        } else if (filter === "HIGH_TO_LOW") {
-            coffee.sort(
-                (a, b) =>
-                    (b.salePrice || b.originalPrice) - (a.salePrice || a.originalPrice)
-            );
-        } else if (filter === "RATING") {
-            coffee.sort((a, b) => b.rating - a.rating);
-        }
-
-        const coffeeHtml = coffee
-            .map((coffee) => {
-                return `<div class="coffee">
-    <figure class="coffee__img--wrapper">
-      <img class="coffee__img" src="${coffee.url}" alt="">
-    </figure>
-    <div class="coffee__title">
-      ${coffee.title}
-    </div>
-    <div class="coffee__ratings">
-      ${ratingsHTML(coffee.rating)}
-    </div>
-    <div class="coffee__price">
-      ${priceHTML(coffee.originalPrice, coffee.salePrice)}
-    </div>
-  </div>`;
-            })
-            .join("");
-
-        coffeeWrapper.innerHTML = coffeeHtml;
+    if (filter === "LOW_TO_HIGH") {
+        coffee.sort((a, b) => (a.salePrice || a.originalPrice) - (b.salePrice || b.originalPrice));
+    } else if (filter === "HIGH_TO_LOW") {
+        coffee.sort((a, b) => (b.salePrice || b.originalPrice) - (a.salePrice || a.originalPrice));
+    } else if (filter === "RATING") {
+        coffee.sort((a, b) => b.rating - a.rating);
     }
 
+    const coffeeHtml = coffee.map((coffee) => {
+        return `<div class="coffee">
+            <figure class="coffee__img--wrapper">
+                <img class="coffee__img" src="${coffee.url}" alt="">
+            </figure>
+            <div class="coffee__title">${coffee.title}</div>
+            <div class="coffee__ratings">${ratingsHTML(coffee.rating)}</div>
+            <div class="coffee__price">${priceHTML(coffee.originalPrice, coffee.salePrice)}</div>
+        </div>`;
+    }).join("");
 
-    function priceHTML(originalPrice, salePrice) {
-        if (!salePrice) {
-            return `$${originalPrice.toFixed(2)}`;
-        }
-        return `<span class="coffee__price--normal">$${originalPrice.toFixed(
-            2
-        )}</span>$${salePrice.toFixed(2)}`;
+    coffeeWrapper.innerHTML = coffeeHtml;
+}
+
+function priceHTML(originalPrice, salePrice) {
+    if (!salePrice) {
+        return `$${originalPrice.toFixed(2)}`;
     }
+    return `<span class="coffee__price--normal">$${originalPrice.toFixed(2)}</span>$${salePrice.toFixed(2)}`;
+}
 
-    function ratingsHTML(rating) {
-        let ratingHTML = "";
-        for (let i = 0; i < Math.floor(rating); ++i) {
-            ratingHTML += '<i class="fas fa-star"></i>\n';
-        }
-        if (!Number.isInteger(rating)) {
-            ratingHTML += '<i class="fas fa-star-half-alt"></i>\n';
-        }
-        return ratingHTML;
+function ratingsHTML(rating) {
+    let ratingHTML = "";
+    for (let i = 0; i < Math.floor(rating); ++i) {
+        ratingHTML += '<i class="fas fa-star"></i>\n';
     }
-
-    function filterCoffee(event) {
-        renderCoffee(event.target.value);
-
+    if (!Number.isInteger(rating)) {
+        ratingHTML += '<i class="fas fa-star-half-alt"></i>\n';
     }
+    return ratingHTML;
+}
 
-    function searchCoffee(event) {
-        const searchTerm = event.target.value.toLowerCase();
-        const coffeeItems = document.querySelectorAll('.coffee');
+function filterCoffee(event) {
+    renderCoffee(event.target.value);
+}
 
-        coffeeItems.forEach(item => {
-            const coffeeName = item.querySelector('.coffee__title').textContent.toLowerCase();
-            if (coffeeName.includes(searchTerm)) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    }
-
-    setTimeout(() => {
-        renderCoffee();
+function searchCoffee(event) {
+    const searchTerm = event.target.value.toLowerCase();
+    const coffeeItems = document.querySelectorAll('.coffee');
+    coffeeItems.forEach(item => {
+        const coffeeName = item.querySelector('.coffee__title').textContent.toLowerCase();
+        item.style.display = coffeeName.includes(searchTerm) ? 'block' : 'none';
     });
+}
 
+renderCoffee();
 
-
-    // FAKE DATA
-    function getCoffee() {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve([
-                    {
-                        id: 1,
-                        title: "Blonde Roast",
-                        url: "blonde roast.webp",
-                        originalPrice: 29.99,
-                        salePrice: 14.95,
-                        rating: 4.5,
-                    },
-                    {
-                        id: 2,
-                        title: "Medium Roast",
-                        url: "medium_roast_coffee.webp",
-                        originalPrice: 24.99,
-                        salePrice: 11.99,
-                        rating: 5,
-                    },
-                    {
-                        id: 3,
-                        title: "Dark Roast",
-                        url: "dark roast coffee.webp",
-                        originalPrice: 27.99,
-                        salePrice: 14.99,
-                        rating: 5,
-                    },
-                    {
-                        id: 4,
-                        title: "French Roast",
-                        url: "frenchroast.webp",
-                        originalPrice: 24.99,
-                        salePrice: 14.99,
-                        rating: 4.5,
-                    },
-                    {
-                        id: 5,
-                        title: "Italian Roast",
-                        url: "Italian Roast.jpeg",
-                        originalPrice: 26.99,
-                        salePrice: 14.99,
-                        rating: 4,
-                    },
-                    {
-                        id: 6,
-                        title: "Rocky Mountain Blend",
-                        url: "Rocky_Moun_Blend.webp",
-                        originalPrice: 29.99,
-                        salePrice: 14.99,
-                        rating: 5,
-                    },
-                    {
-                        id: 7,
-                        title: "Espresso Roast",
-                        url: "espresso_roast.jpg",
-                        originalPrice: 29.99,
-                        salePrice: 14.99,
-                        rating: 4,
-                    },
-                    {
-                        id: 8,
-                        title: "Americano Roast",
-                        url: "Americano_roast.jpg",
-                        originalPrice: 29.99,
-                        salePrice: 14.99,
-                        rating: 4,
-                    },
-
-
-                ]);
-            }, 1000);
-        });
-    }
-
+function getCoffee() {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve([
+                { id: 1, title: "Blonde Roast", url: "blonde roast.webp", originalPrice: 29.99, salePrice: 14.95, rating: 4.5 },
+                { id: 2, title: "Medium Roast", url: "medium_roast_coffee.webp", originalPrice: 24.99, salePrice: 11.99, rating: 5 },
+                { id: 3, title: "Dark Roast", url: "dark roast coffee.webp", originalPrice: 27.99, salePrice: 14.99, rating: 5 },
+                { id: 4, title: "French Roast", url: "frenchroast.webp", originalPrice: 24.99, salePrice: 14.99, rating: 4.5 },
+                { id: 5, title: "Italian Roast", url: "Italian Roast.jpeg", originalPrice: 26.99, salePrice: 14.99, rating: 4 },
+                { id: 6, title: "Rocky Mountain Blend", url: "Rocky_Moun_Blend.webp", originalPrice: 29.99, salePrice: 14.99, rating: 5 },
+                { id: 7, title: "Espresso Roast", url: "espresso_roast.jpg", originalPrice: 29.99, salePrice: 14.99, rating: 4 },
+                { id: 8, title: "Americano Roast", url: "Americano_roast.jpg", originalPrice: 29.99, salePrice: 14.99, rating: 4 },
+            ]);
+        }, 1000);
+    });
 }
