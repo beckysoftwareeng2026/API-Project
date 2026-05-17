@@ -2,49 +2,51 @@ let coffee;
 
 async function renderCoffee(filter) {
     const coffeeWrapper = document.querySelector(".coffee");
+    const coffeeLoading = document.querySelector(".coffee__loading");
 
-    coffeeWrapper.classList += ' coffee__loading'
+    coffeeLoading.style.display = "block";
 
     if (!coffee) {
         coffee = await getCoffee();
     }
+    coffeeLoading.style.display = "none";
+    // rest of render code
+}
 
-    coffeeWrapper.classList.remove('coffee__loading')
+if (filter === "LOW_TO_HIGH") {
+    coffee.sort(
+        (a, b) =>
+            (a.salePrice || a.originalPrice) - (b.salePrice || b.originalPrice)
+    );
+} else if (filter === "HIGH_TO_LOW") {
+    coffee.sort(
+        (a, b) =>
+            (b.salePrice || b.originalPrice) - (a.salePrice || a.originalPrice)
+    );
+} else if (filter === "RATING") {
+    coffee.sort((a, b) => b.rating - a.rating);
+}
 
-    if (filter === "LOW_TO_HIGH") {
-        coffee.sort(
-            (a, b) =>
-                (a.salePrice || a.originalPrice) - (b.salePrice || b.originalPrice)
-        );
-    } else if (filter === "HIGH_TO_LOW") {
-        coffee.sort(
-            (a, b) =>
-                (b.salePrice || b.originalPrice) - (a.salePrice || a.originalPrice)
-        );
-    } else if (filter === "RATING") {
-        coffee.sort((a, b) => b.rating - a.rating);
-    }
-
-    const coffeeHtml = coffee
-        .map((coffee) => {
-            return `<div class="book">
-    <figure class="book__img--wrapper">
-      <img class="book__img" src="${coffee.url}" alt="">
+const coffeeHtml = coffee
+    .map((coffee) => {
+        return `<div class="coffee">
+    <figure class="coffee__img--wrapper">
+      <img class="coffee__img" src="${coffee.url}" alt="">
     </figure>
-    <div class="book__title">
+    <div class="coffee__title">
       ${coffee.title}
     </div>
-    <div class="book__ratings">
+    <div class="coffee__ratings">
       ${ratingsHTML(coffee.rating)}
     </div>
-    <div class="book__price">
+    <div class="coffee__price">
       ${priceHTML(coffee.originalPrice, coffee.salePrice)}
     </div>
   </div>`;
-        })
-        .join("");
+    })
+    .join("");
 
-    coffeeWrapper.innerHTML = coffeeHtml;
+coffeeWrapper.innerHTML = coffeeHtml;
 }
 
 function priceHTML(originalPrice, salePrice) {

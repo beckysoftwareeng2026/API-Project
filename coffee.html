@@ -57,6 +57,11 @@
                             <h2 class="section__title books__header--title">
                                 All <span class="teal">Coffee</span>
                             </h2>
+                            <div class="input__search">
+                                <input type="text" id="search"
+                                    placeholder="Search for coffee"
+                                    oninput="searchCoffee(event)" />
+                            </div>
                             <select id="filter" onchange="filterCoffee(event)">
                                 <option value disabled selected>Sort</option>
                                 <option value="LOW_TO_HIGH">Price, Low to
