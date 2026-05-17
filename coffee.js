@@ -73,105 +73,106 @@ function filterCoffee(event) {
     renderCoffee(event.target.value);
 
 }
+function getCoffeeById(id) {
+    return coffee.find((coffee) => coffee.id === id);
+    const url = 'https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&tags=under_30_minutes';
+    const options = {
+        method: 'GET',
+        headers: {
+            'x-rapidapi-key': '90273038afmshde2b2f4a176cf81p1e3d74jsn4ced151642ae',
+            'x-rapidapi-host': 'tasty.p.rapidapi.com',
+            'Content-Type': 'application/json'
+        }
+    };
 
-const url = 'https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&tags=under_30_minutes';
-const options = {
-    method: 'GET',
-    headers: {
-        'x-rapidapi-key': '90273038afmshde2b2f4a176cf81p1e3d74jsn4ced151642ae',
-        'x-rapidapi-host': 'tasty.p.rapidapi.com',
-        'Content-Type': 'application/json'
+    try {
+        const response = await fetch(url, options);
+        const result = await response.text();
+        console.log(result);
+    } catch (error) {
+        console.error(error);
     }
-};
 
-try {
-    const response = await fetch(url, options);
-    const result = await response.text();
-    console.log(result);
-} catch (error) {
-    console.error(error);
-}
-
-setTimeout(() => {
-    renderCoffee();
-});
-
-
-
-// FAKE DATA
-function getCoffee() {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve([
-                {
-                    id: 1,
-                    title: "Blonde Roast",
-                    url: "blonde roast.webp",
-                    originalPrice: 29.99,
-                    salePrice: 14.95,
-                    rating: 4.5,
-                },
-                {
-                    id: 2,
-                    title: "Medium Roast",
-                    url: "medium_roast_coffee.webp",
-                    originalPrice: 24.99,
-                    salePrice: 11.99,
-                    rating: 5,
-                },
-                {
-                    id: 3,
-                    title: "Dark Roast",
-                    url: "dark roast coffee.webp",
-                    originalPrice: 27.99,
-                    salePrice: 14.99,
-                    rating: 5,
-                },
-                {
-                    id: 4,
-                    title: "French Roast",
-                    url: "frenchroast.webp",
-                    originalPrice: 24.99,
-                    salePrice: 14.99,
-                    rating: 4.5,
-                },
-                {
-                    id: 5,
-                    title: "Italian Roast",
-                    url: "Italian Roast.jpeg",
-                    originalPrice: 26.99,
-                    salePrice: 14.99,
-                    rating: 4,
-                },
-                {
-                    id: 6,
-                    title: "Rocky Mountain Blend",
-                    url: "Rocky_Moun_Blend.webp",
-                    originalPrice: 29.99,
-                    salePrice: 14.99,
-                    rating: 5,
-                },
-                {
-                    id: 7,
-                    title: "Espresso Roast",
-                    url: "espresso_roast.jpg",
-                    originalPrice: 29.99,
-                    salePrice: 14.99,
-                    rating: 4,
-                },
-                {
-                    id: 8,
-                    title: "Americano Roast",
-                    url: "Americano_roast.jpg",
-                    originalPrice: 29.99,
-                    salePrice: 14.99,
-                    rating: 4,
-                },
-
-
-            ]);
-        }, 1000);
+    setTimeout(() => {
+        renderCoffee();
     });
+
+
+
+    // FAKE DATA
+    function getCoffee() {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve([
+                    {
+                        id: 1,
+                        title: "Blonde Roast",
+                        url: "blonde roast.webp",
+                        originalPrice: 29.99,
+                        salePrice: 14.95,
+                        rating: 4.5,
+                    },
+                    {
+                        id: 2,
+                        title: "Medium Roast",
+                        url: "medium_roast_coffee.webp",
+                        originalPrice: 24.99,
+                        salePrice: 11.99,
+                        rating: 5,
+                    },
+                    {
+                        id: 3,
+                        title: "Dark Roast",
+                        url: "dark roast coffee.webp",
+                        originalPrice: 27.99,
+                        salePrice: 14.99,
+                        rating: 5,
+                    },
+                    {
+                        id: 4,
+                        title: "French Roast",
+                        url: "frenchroast.webp",
+                        originalPrice: 24.99,
+                        salePrice: 14.99,
+                        rating: 4.5,
+                    },
+                    {
+                        id: 5,
+                        title: "Italian Roast",
+                        url: "Italian Roast.jpeg",
+                        originalPrice: 26.99,
+                        salePrice: 14.99,
+                        rating: 4,
+                    },
+                    {
+                        id: 6,
+                        title: "Rocky Mountain Blend",
+                        url: "Rocky_Moun_Blend.webp",
+                        originalPrice: 29.99,
+                        salePrice: 14.99,
+                        rating: 5,
+                    },
+                    {
+                        id: 7,
+                        title: "Espresso Roast",
+                        url: "espresso_roast.jpg",
+                        originalPrice: 29.99,
+                        salePrice: 14.99,
+                        rating: 4,
+                    },
+                    {
+                        id: 8,
+                        title: "Americano Roast",
+                        url: "Americano_roast.jpg",
+                        originalPrice: 29.99,
+                        salePrice: 14.99,
+                        rating: 4,
+                    },
+
+
+                ]);
+            }, 1000);
+        });
+    }
+
 }
-
-
