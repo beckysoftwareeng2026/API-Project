@@ -6,9 +6,7 @@ async function renderCoffee(filter) {
 
     coffeeLoading.style.display = "block";
 
-    if (!coffee) {
-        coffee = await getCoffee();
-    }
+
     coffeeLoading.style.display = "none";
 
 
@@ -73,6 +71,20 @@ function filterCoffee(event) {
     renderCoffee(event.target.value);
 
 }
+
+function searchCoffee(event) {
+    const searchTerm = event.target.value.toLowerCase();
+    const coffeeItems = document.querySelectorAll('.coffee');
+
+    coffeeItems.forEach(item => {
+        const coffeeName = item.querySelector('.coffee__title').textContent.toLowerCase();
+        if (coffeeName.includes(searchTerm)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
 function getCoffeeById(id) {
     return coffee.find((coffee) => coffee.id === id);
     const url = 'https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&tags=under_30_minutes';
@@ -87,7 +99,7 @@ function getCoffeeById(id) {
 
     try {
         const response = await fetch(url, options);
-        const result = await response.text();
+        const result = await response.json();
         console.log(result);
     } catch (error) {
         console.error(error);
