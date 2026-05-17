@@ -1,7 +1,7 @@
 let coffee;
 
 async function renderCoffee(filter) {
-    const coffeeWrapper = document.querySelector(".coffee");
+    const coffeeWrapper = document.querySelector(".coffees");
     const coffeeLoading = document.querySelector(".coffee__loading");
 
     coffeeLoading.style.display = "block";
