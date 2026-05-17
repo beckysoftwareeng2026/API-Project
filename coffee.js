@@ -9,9 +9,9 @@ async function renderCoffee(filter) {
     coffeeLoading.style.display = "none";
 
     if (filter === "A_TO_Z") {
-        coffee.sort((a, b) => (a.title || b.title) - (b.title || a.title));
+        coffee.sort((a, b) => (a.title || b.title).localeCompare(b.title || a.title));
     } else if (filter === "Z_TO_A") {
-        coffee.sort((a, b) => (b.title || a.title) - (a.title || b.title));
+        coffee.sort((a, b) => (b.title || a.title).localeCompare(a.title || b.title));
     } else if (filter === "RATING") {
         coffee.sort((a, b) => b.rating - a.rating);
     }
