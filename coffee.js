@@ -10,23 +10,44 @@ async function renderCoffee(filter) {
     coffeeLoading.style.display = "none";
 
 
-    if (filter === "LOW_TO_HIGH") {
-        coffee.sort(
-            (a, b) =>
-                (a.salePrice || a.originalPrice) - (b.salePrice || b.originalPrice)
-        );
-    } else if (filter === "HIGH_TO_LOW") {
-        coffee.sort(
-            (a, b) =>
-                (b.salePrice || b.originalPrice) - (a.salePrice || a.originalPrice)
-        );
-    } else if (filter === "RATING") {
-        coffee.sort((a, b) => b.rating - a.rating);
-    }
+    function getCoffeeById(id) {
+        return coffee.find((coffee) => coffee.id === id);
+        const url = 'https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&tags=under_30_minutes';
+        const options = {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': '90273038afmshde2b2f4a176cf81p1e3d74jsn4ced151642ae',
+                'x-rapidapi-host': 'tasty.p.rapidapi.com',
+                'Content-Type': 'application/json'
+            }
+        };
 
-    const coffeeHtml = coffee
-        .map((coffee) => {
-            return `<div class="coffee">
+        try {
+            const response = await fetch(url, options);
+            const result = await response.json();
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+
+
+        if (filter === "LOW_TO_HIGH") {
+            coffee.sort(
+                (a, b) =>
+                    (a.salePrice || a.originalPrice) - (b.salePrice || b.originalPrice)
+            );
+        } else if (filter === "HIGH_TO_LOW") {
+            coffee.sort(
+                (a, b) =>
+                    (b.salePrice || b.originalPrice) - (a.salePrice || a.originalPrice)
+            );
+        } else if (filter === "RATING") {
+            coffee.sort((a, b) => b.rating - a.rating);
+        }
+
+        const coffeeHtml = coffee
+            .map((coffee) => {
+                return `<div class="coffee">
     <figure class="coffee__img--wrapper">
       <img class="coffee__img" src="${coffee.url}" alt="">
     </figure>
@@ -40,69 +61,50 @@ async function renderCoffee(filter) {
       ${priceHTML(coffee.originalPrice, coffee.salePrice)}
     </div>
   </div>`;
-        })
-        .join("");
+            })
+            .join("");
 
-    coffeeWrapper.innerHTML = coffeeHtml;
-}
-
-
-function priceHTML(originalPrice, salePrice) {
-    if (!salePrice) {
-        return `$${originalPrice.toFixed(2)}`;
+        coffeeWrapper.innerHTML = coffeeHtml;
     }
-    return `<span class="coffee__price--normal">$${originalPrice.toFixed(
-        2
-    )}</span>$${salePrice.toFixed(2)}`;
-}
 
-function ratingsHTML(rating) {
-    let ratingHTML = "";
-    for (let i = 0; i < Math.floor(rating); ++i) {
-        ratingHTML += '<i class="fas fa-star"></i>\n';
-    }
-    if (!Number.isInteger(rating)) {
-        ratingHTML += '<i class="fas fa-star-half-alt"></i>\n';
-    }
-    return ratingHTML;
-}
 
-function filterCoffee(event) {
-    renderCoffee(event.target.value);
-
-}
-
-function searchCoffee(event) {
-    const searchTerm = event.target.value.toLowerCase();
-    const coffeeItems = document.querySelectorAll('.coffee');
-
-    coffeeItems.forEach(item => {
-        const coffeeName = item.querySelector('.coffee__title').textContent.toLowerCase();
-        if (coffeeName.includes(searchTerm)) {
-            item.style.display = 'block';
-        } else {
-            item.style.display = 'none';
+    function priceHTML(originalPrice, salePrice) {
+        if (!salePrice) {
+            return `$${originalPrice.toFixed(2)}`;
         }
-    });
-}
-function getCoffeeById(id) {
-    return coffee.find((coffee) => coffee.id === id);
-    const url = 'https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&tags=under_30_minutes';
-    const options = {
-        method: 'GET',
-        headers: {
-            'x-rapidapi-key': '90273038afmshde2b2f4a176cf81p1e3d74jsn4ced151642ae',
-            'x-rapidapi-host': 'tasty.p.rapidapi.com',
-            'Content-Type': 'application/json'
-        }
-    };
+        return `<span class="coffee__price--normal">$${originalPrice.toFixed(
+            2
+        )}</span>$${salePrice.toFixed(2)}`;
+    }
 
-    try {
-        const response = await fetch(url, options);
-        const result = await response.json();
-        console.log(result);
-    } catch (error) {
-        console.error(error);
+    function ratingsHTML(rating) {
+        let ratingHTML = "";
+        for (let i = 0; i < Math.floor(rating); ++i) {
+            ratingHTML += '<i class="fas fa-star"></i>\n';
+        }
+        if (!Number.isInteger(rating)) {
+            ratingHTML += '<i class="fas fa-star-half-alt"></i>\n';
+        }
+        return ratingHTML;
+    }
+
+    function filterCoffee(event) {
+        renderCoffee(event.target.value);
+
+    }
+
+    function searchCoffee(event) {
+        const searchTerm = event.target.value.toLowerCase();
+        const coffeeItems = document.querySelectorAll('.coffee');
+
+        coffeeItems.forEach(item => {
+            const coffeeName = item.querySelector('.coffee__title').textContent.toLowerCase();
+            if (coffeeName.includes(searchTerm)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
     }
 
     setTimeout(() => {
