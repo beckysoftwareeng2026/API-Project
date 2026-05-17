@@ -71,11 +71,32 @@ function ratingsHTML(rating) {
 
 function filterCoffee(event) {
     renderCoffee(event.target.value);
+
+}
+
+const url = 'https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&tags=under_30_minutes';
+const options = {
+    method: 'GET',
+    headers: {
+        'x-rapidapi-key': '90273038afmshde2b2f4a176cf81p1e3d74jsn4ced151642ae',
+        'x-rapidapi-host': 'tasty.p.rapidapi.com',
+        'Content-Type': 'application/json'
+    }
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
 }
 
 setTimeout(() => {
     renderCoffee();
 });
+
+
 
 // FAKE DATA
 function getCoffee() {
@@ -152,3 +173,5 @@ function getCoffee() {
         }, 1000);
     });
 }
+
+
